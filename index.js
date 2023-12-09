@@ -93,7 +93,7 @@ client.on("messageCreate", async function(message){
 				model: "gpt-3.5-turbo",
 				messages: messageModule,
 				temperature: 1,
-				max_tokens: 200
+				max_tokens: 100
 			})
 			message.reply(`${gptResponse.data.choices[0].message.content}`);
 			context.push(`${gptResponse.data.choices[0].message.content}`);

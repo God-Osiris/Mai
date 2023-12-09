@@ -1,4 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { convert } = require('html-to-text');
+const s_options = {
+	wordwrap: null
+}
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -98,7 +102,7 @@ module.exports = {
 				fields: [
 					{
 						name: 'Description:',
-						value: output.data.Media.description,
+						value: convert(output.data.Media.description, s_options),
 					},
 					{
 						name: 'Information:',
