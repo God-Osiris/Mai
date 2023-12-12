@@ -66,43 +66,4 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 });
 
-client.on("messageCreate", async function(message){
-    if(message.author.bot) return;
-	if(message.channel.id !== channelId) return;
-	if(message.content.startsWith('.')) return;
-
-	const initPrompt = "Roleplay as Sakurajima Mai, a tiny bit rude and funny but caring anime waifu who speaks very very less.Never reply like an AI model."
-	const limit = 3;
-	while(context.length >= limit){
-		context.shift();
-	}
-	if(context.length <= limit){
-		context.push(`${message.content}`)
-		let messageModule = []
-		messageModule.push({"role": "system", "content": initPrompt})
-		messageModule.push({"role": "user", "content": context[0]})
-		if(typeof context[1] !== "undefined"){
-			messageModule.push({"role": "assistant", "content": context[1]})
-		}
-		if(typeof context[2] !== "undefined"){
-			messageModule.push({"role": "user", "content": context[2]})
-		}
-		try {
-			message.channel.sendTyping();
-			const gptResponse = await openai.createChatCompletion({
-				model: "gpt-3.5-turbo",
-				messages: messageModule,
-				temperature: 1,
-				max_tokens: 100
-			})
-			message.reply(`${gptResponse.data.choices[0].message.content}`);
-			context.push(`${gptResponse.data.choices[0].message.content}`);
-		} catch(err) {
-			console.log(err)
-			message.channel.send("Failed due to internal error (likely response character limit exceeded), please try again.")
-			context.length = 0;
-		}
-	}
-});
-
 client.login(token);
